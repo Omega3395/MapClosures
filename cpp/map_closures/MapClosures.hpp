@@ -71,7 +71,7 @@ public:
     const DensityMap &getDensityMapFromId(const int &map_id) const {
         return density_maps_.at(map_id);
     }
-    std::vector<cv::KeyPoint> getOrbKeypoints(); {
+    std::vector<cv::KeyPoint> getOrbKeypoints() {
         return orb_keypoints_;
     }
 
