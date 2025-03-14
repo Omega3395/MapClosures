@@ -71,6 +71,9 @@ public:
     const DensityMap &getDensityMapFromId(const int &map_id) const {
         return density_maps_.at(map_id);
     }
+    std::vector<cv::KeyPoint> getOrbKeypoints(); {
+        return orb_keypoints_;
+    }
 
 protected:
     void MatchAndAddToDatabase(const int id, const std::vector<Eigen::Vector3d> &local_map);
@@ -82,5 +85,6 @@ protected:
     std::unordered_map<int, Eigen::Matrix4d> ground_alignments_;
     std::unique_ptr<Tree> hbst_binary_tree_ = std::make_unique<Tree>();
     cv::Ptr<cv::DescriptorExtractor> orb_extractor_;
+    std::vector<cv::KeyPoint> orb_keypoints_;
 };
 }  // namespace map_closures
