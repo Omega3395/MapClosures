@@ -77,7 +77,6 @@ public:
     std::vector<cv::KeyPoint> orb_keypoints_;
     cv::Ptr<cv::DescriptorExtractor> orb_extractor_;
 
-protected:
     void MatchAndAddToDatabase(const int id, const std::vector<Eigen::Vector3d> &local_map);
     ClosureCandidate ValidateClosure(const int reference_id, const int query_id) const;
 
