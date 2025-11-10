@@ -35,12 +35,18 @@
 #include "AlignRansac2D.hpp"
 #include "DensityMap.hpp"
 #include "GroundAlign.hpp"
+#include "VoxelMap.hpp"
 #include "srrg_hbst/types/binary_tree.hpp"
 
 namespace {
 static constexpr int min_no_of_matches = 2;
 static constexpr int no_of_local_maps_to_skip = 3;
 static constexpr int self_similarity_threshold = 35;
+
+// parameters for automatic voxel computation
+constexpr double default_voxel_size = 0.5;
+constexpr double default_max_distance = 100.0;
+
 
 // fixed parameters for OpenCV ORB Features
 static constexpr float scale_factor = 1.00f;
@@ -171,6 +177,19 @@ std::vector<ClosureCandidate> MapClosures::GetTopKClosures(
         }
     }
     return closures;
+}
+
+std::vector<ClosureCandidate> MapClosures::GetTopKClosures(
+    const int query_id,
+    const std::vector<Eigen::Vector3d> &local_map,
+    const int k) {
+    
+    VoxelMap voxel_map(default_voxel_size, default_max_distance);
+    voxel_map.AddPoints(local_map);
+    
+    const auto [voxel_means, voxel_normals] = voxel_map.PerVoxelMeanAndNormal();
+    
+    return GetTopKClosures(query_id, local_map, voxel_means, voxel_normals, k);
 }
 
 }  // namespace map_closures

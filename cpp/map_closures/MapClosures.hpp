@@ -61,6 +61,24 @@ public:
     ~MapClosures() = default;
 
     ClosureCandidate GetBestClosure(const int query_id,
+                                    const std::vector<Eigen::Vector3d> &local_map)
+        const auto &closures = GetTopKClosures(query_id, local_map, 1);
+        if (closures.empty()) {
+            return ClosureCandidate();
+        }
+        return closures.front();
+    }
+    
+    std::vector<ClosureCandidate> GetTopKClosures(const int query_id,
+                                                  const std::vector<Eigen::Vector3d> &local_map,
+                                                  const int k);
+    
+    std::vector<ClosureCandidate> GetClosures(const int query_id,
+                                              const std::vector<Eigen::Vector3d> &local_map) {
+        return GetTopKClosures(query_id, local_map, -1);
+    }
+
+    ClosureCandidate GetBestClosure(const int query_id,
                                     const std::vector<Eigen::Vector3d> &local_map,
                                     const std::vector<Eigen::Vector3d> &voxel_means,
                                     const std::vector<Eigen::Vector3d> &voxel_normals) {
